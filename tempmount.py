@@ -36,6 +36,8 @@ class TempMount(object):
         Args:
             @device: path of the device you want to mount, e.g. '/dev/sda1'
             @loop: True for a loopback mount, False otherwise (default is False)
+        Returns:
+            @path: the path of the temporary directory
         """
         self.device = device
         self.loop = loop
@@ -46,6 +48,7 @@ class TempMount(object):
         if self.loop:
             prefix += ['-o', 'loop']
         subprocess.check_call(prefix + [self.device, self.tempdir])
+        return os.path.realpath(self.tempdir)
 
     def __exit__(self, exc_type, value, traceback):
         """Never swallows exceptions."""
